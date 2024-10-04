@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 import joblib
 
 app = Flask(__name__)
+app.config["DEBUG"] = True
 
 model1 = joblib.load(open('Models/heart_LR.pkl','rb'))
 
@@ -12,14 +13,14 @@ def quick():
         data = request.json
         app.logger.info(f"Received data: {data}")
 
-        features = [
-            data.get('Chest Pain Type'),
-            data.get('Heart Rate'),
-            data.get('Exang'),
-            data.get('Oldpeak'),
-            data.get('ca'),
-            data.get('thalassemia')
-        ]
+        chest_pain_type = data.get('Chest Pain Type')
+        heart_rate = data.get('Heart Rate')
+        exang = data.get('Exang')
+        oldpeak = data.get('Oldpeak')
+        ca = data.get('ca')
+        thalassemia = data.get('thalassemia')
+
+        features = [chest_pain_type, heart_rate, exang, oldpeak, ca, thalassemia]
 
 
         final_features = np.array(features).reshape(1, -1)

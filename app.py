@@ -10,7 +10,7 @@ model1 = joblib.load(open('Models/heart_LR.pkl','rb'))
 @app.route('/quick', methods=['GET', 'POST'])
 def quick():
     try:
-        data = request.form
+        data = request.json
         app.logger.info(f"Received data: {data}")
 
         chest_pain_type = data.get('Chest Pain Type')

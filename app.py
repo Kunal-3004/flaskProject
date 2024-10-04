@@ -4,7 +4,7 @@ import pickle
 
 app = Flask(__name__)
 
-model1 = pickle.load(open('Models/heart_disease_predict.pkl', 'rb'))
+model1 = pickle.load(open('Models/heart_disease.pkl', 'rb'))
 
 def bmi(height, weight):
     return round(weight / ((height / 100) ** 2), 2)

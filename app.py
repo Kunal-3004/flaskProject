@@ -13,12 +13,12 @@ def quick():
         data = request.json
         app.logger.info(f"Received data: {data}")
 
-        chest_pain_type = data.get('Chest Pain Type')
-        heart_rate = data.get('Heart Rate')
-        exang = data.get('Exang')
-        oldpeak = data.get('Oldpeak')
-        ca = data.get('ca')
-        thalassemia = data.get('thalassemia')
+        chest_pain_type = int(data.get('Chest Pain Type'))
+        heart_rate = int(data.get('Heart Rate'))
+        exang = int(data.get('Exang'))
+        oldpeak = float(data.get('Oldpeak'))
+        ca = int(data.get('ca'))
+        thalassemia = int(data.get('thalassemia'))
 
         features = [chest_pain_type, heart_rate, exang, oldpeak, ca, thalassemia]
 

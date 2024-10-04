@@ -5,8 +5,7 @@ import pickle
 
 app = Flask(__name__)
 
-model1 = xgb.Booster()
-model1.load_model('Models/heart.xgb')
+model1 = pickle.load(open('Models/heart_LR.pkl','rb'))
 
 def bmi(height, weight):
     return round(weight / ((height / 100) ** 2), 2)

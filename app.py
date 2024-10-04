@@ -5,7 +5,8 @@ import joblib
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
-model1 = joblib.load(open('Models/heart_LR.pkl','rb'))
+# Load the pre-trained model
+model1 = joblib.load(open('Models/heart_LR.pkl', 'rb'))
 
 @app.route('/quick', methods=['GET', 'POST'])
 def quick():
@@ -20,23 +21,23 @@ def quick():
         ca = data.get('ca')
         thalassemia = data.get('thalassemia')
 
-        if chest_pain_type is None or heart_rate is None or exang is None or oldpeak is None or ca is None or thalassemia is None:
+        if any(param is None for param in [chest_pain_type, heart_rate, exang, oldpeak, ca, thalassemia]):
             return jsonify({'error': 'One or more input features are missing'}), 400
 
         try:
-            chest_pain_type = int(chest_pain_type)
-            heart_rate = int(heart_rate)
-            exang = int(exang)
-            oldpeak = float(oldpeak)
-            ca = int(ca)
-            thalassemia = int(thalassemia)
+            features = [
+                int(chest_pain_type),
+                int(heart_rate),
+                int(exang),
+                float(oldpeak),
+                int(ca),
+                int(thalassemia)
+            ]
         except ValueError as e:
-            return jsonify({'error': 'Invalid input types: ' + str(e)}), 400
+            return jsonify({'error': f'Invalid input types: {str(e)}'}), 400
 
-        features = [chest_pain_type, heart_rate, exang, oldpeak, ca, thalassemia]
-
-        final_features = np.array(features).reshape(1, -1)
         app.logger.info(f"Features before prediction: {features}")
+        final_features = np.array(features).reshape(1, -1)
         prediction = model1.predict(final_features)
 
         result = "No need to worry" if prediction[0] == 0 else "You are detected with heart problems. You need to consult a doctor immediately"
@@ -49,6 +50,7 @@ def quick():
     except Exception as e:
         app.logger.error(f"Error: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
 @app.route('/')
 def home():
     return jsonify({"message": "Welcome to the Heart Disease Prediction API!"})
